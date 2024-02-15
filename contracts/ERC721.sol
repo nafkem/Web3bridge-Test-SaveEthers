@@ -11,13 +11,20 @@ contract ERC721 {
     mapping(uint256 => address) private _tokenApprovals;
     mapping(address => mapping(address => bool)) private _userApprovals;
 
+    event TokenMinted(address indexed to, uint256 indexed tokenId);
+
+    
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
     event ApprovalForAll(address indexed owner, address indexed user, bool approved);
 
-    constructor(string memory name_, string memory symbol_) {
-        _name = name_;
-        _symbol = symbol_;
+    constructor(
+        string memory _name,
+        string memory _symbol
+    ) 
+    ERC721(_name, _symbol) Ownable(msg.sender) 
+    {
+        baseTokenURI = "ipfs://QmWhjwof6RXuHHg9varmzvCLJCWeGMT4vaxkedwe6Sc9qZ";
     }
 
     function name() external view returns (string memory) {
@@ -32,11 +39,23 @@ contract ERC721 {
         require(owner != address(0), "ERC721: balance query for the zero address");
         return _ownershipTokenCount[owner];
     }
-function ownerOf(uint256 tokenId) external view returns (address) {
+    function ownerOf(uint256 tokenId) external view returns (address) {
     require(_exists(tokenId), "ERC721: owner query for nonexistent token");
     return _tokenOwners[tokenId];
 }
 
+function tokenURI(uint256 tokenId)public view returns (string memory)
+    {
+        uint256 newtokenId = 1;
+        require(_exists(newtokenId), "URI query for nonexistent token");
+
+        return
+            bytes(baseTokenURI).length > 0
+                ? string(
+                    abi.encodePacked(baseTokenURI, "/", Strings.toString(newtokenId), ".json")
+                )
+                : "";
+    }
     function ownerOf(uint256 tokenId) external view returns (address) {
     require(_exists(tokenId), "ERC721: owner query for nonexistent token");
     return _tokenOwners[tokenId];
