@@ -2,11 +2,11 @@ import { ethers } from "hardhat";
 
 async function main() {
   const totalSupply = 1000000; 
-  const NafToken = await ethers.deployContract("NafToken", 1000000); 
-  await NafToken.waitForDeployment();
+  const ERC721 = await ethers.deployContract("ERC721", 1000000); 
+  await ERC721.waitForDeployment();
 
   console.log(
-    `NafToken contract deployed to ${NafToken.target}`
+    `ERC721 contract deployed to ${ERC721.target}`
   );
 }
 
